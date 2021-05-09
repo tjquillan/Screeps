@@ -11,7 +11,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
       // Insert creep into the creeps map. This functions for tallying creeps for now.
       const roleTally = roles.get(creep.memory.role);
-      roles.set(creep.memory.role, roleTally ? roleTally + 1 : 0);
+      roles.set(creep.memory.role, roleTally ? roleTally + 1 : 1);
 
       // Have the creep perform its task
       switch (creep.memory.role) {
