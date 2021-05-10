@@ -3,6 +3,13 @@ import { ErrorMapper } from "utils/ErrorMapper";
 import { Harvester } from "roles/harvester";
 import { Upgrader } from "roles/upgrader";
 
+declare global {
+  interface CreepMemory {
+    role: string;
+    working: boolean;
+  }
+}
+
 export const loop = ErrorMapper.wrapLoop(() => {
   const roles: Map<string, number> = new Map<string, number>();
   for (const name in Memory.creeps) {
@@ -34,12 +41,18 @@ export const loop = ErrorMapper.wrapLoop(() => {
   let role = roles.get("harvester");
   if (!role || role < 2) {
     const newName = `Harvester ${Game.time}`;
-    Game.spawns.Spawn1.spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: "harvester", working: false } });
+    Game.spawns.Spawn1.spawnCreep([WORK, CARRY, MOVE, MOVE], newName, {
+      memory: { role: "harvester", working: false }
+    });
   }
 
   role = roles.get("upgrader");
   if (!role || role < 3) {
     const newName = `Upgrader ${Game.time}`;
-    Game.spawns.Spawn1.spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: "upgrader", working: false } });
+    Game.spawns.Spawn1.spawnCreep([WORK, CARRY, MOVE, MOVE], newName, { memory: { role: "upgrader", working: false } });
+  }
+
+  if (Game.cpu.bucket === 10000) {
+    Game.cpu.generatePixel();
   }
 });
